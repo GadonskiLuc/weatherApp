@@ -2,11 +2,26 @@
 
 const apiKey = "fd73a31465a64424b887ac48a298597e"
 const apiCountryURL = "https://flagsapi.com/"
+const loading = document.createElement("div")
+
+const cityList = [
+    "Tóquio",
+    "Nova York",
+    "Londres",
+    "Sydney",
+    "Cairo",
+    "São Paulo",
+    "Toronto",
+    "Berlim",
+    "Bangkok",
+    "Cidade do Cabo"
+];  
 
 const cityInput = document.getElementById("city-input")
 const searchBtn = document.getElementById("search")
 
-const dataElement = document.querySelector("#weather-data")
+
+
 const cityElement = document.querySelector("#city")
 const tempElement = document.querySelector("#temperature span")
 const descElement = document.querySelector("#description")
@@ -14,6 +29,10 @@ const weatherIconElement = document.querySelector("#weather-icon")
 const countryElement = document.querySelector("#country")
 const humidityElement = document.querySelector("#humidity span")
 const windElement = document.querySelector("#wind span")
+
+const folderContainer = document.querySelector(".container")
+const dataContainer = document.querySelector("#weather-data")
+const cityContainer = document.querySelector("#city-suggestion")
 
 //functions
 
@@ -25,19 +44,58 @@ const windElement = document.querySelector("#wind span")
         
         return data
     }
-
+    
     const showWeatherData = async (city) =>{
-        const data = await getWeatherData(city)
-        console.log(data)
+        try{
+            const data = await getWeatherData(city)
+            cityContainer.style.display = "none"
+            loading.style.display = "none"
+            //console.log(data)
+    
+            cityElement.innerText = data.name
+            //tempElement.innerText = parseInt(data.main.temp)
+            tempElement.innerText = Math.trunc(data.main.temp)
+            descElement.innerHTML = data.weather[0].description
+            weatherIconElement.setAttribute('src',`https://openweathermap.org/img/wn/${data.weather[0].icon}.png`)
+            humidityElement.innerText = `${data.main.humidity}%`
+            windElement.innerText = `${data.wind.speed}km/h`
+            countryElement.setAttribute('src',apiCountryURL+data.sys.country+"/flat/64.png")
+            
+        }catch(err){
+            dataContainer.innerText = "Cidade não localizada"    
+        }
+        dataContainer.style.display = "block"
+    }
 
-        cityElement.innerText = data.name
-        //tempElement.innerText = parseInt(data.main.temp)
-        tempElement.innerText = Math.trunc(data.main.temp)
-        descElement.innerHTML = data.weather[0].description
-        weatherIconElement.setAttribute('src',`https://openweathermap.org/img/wn/${data.weather[0].icon}.png`)
-        humidityElement.innerText = `${data.main.humidity}%`
-        windElement.innerText = `${data.wind.speed}km/h`
-        countryElement.setAttribute('src',apiCountryURL+data.sys.country+"/flat/64.png")
+    const citySuggestions = () => {
+        for(city in cityList){
+            const cityBtn = document.createElement("button")
+            cityBtn.setAttribute("id","city-button")
+            
+            cityBtn.addEventListener("click", (e) =>{
+                e.preventDefault();
+                const city = cityBtn.textContent
+                cityContainer.style.display = "none"
+            
+                showLoading(city)
+            })
+
+            cityBtn.innerText = cityList[city]
+            cityContainer.appendChild(cityBtn)
+        }
+    }
+    const showLoading = (city) =>{
+        if(cityContainer.style.display != "none"){
+            cityContainer.style.display = "none"
+        }else{
+            dataContainer.style.display = "none"
+        }
+        loading.setAttribute("id","loading")
+        loading.innerHTML = "Carregando..."
+        folderContainer.appendChild(loading)
+        loading.style.display = "block"
+        
+        setTimeout(()=>showWeatherData(city),2000)
     }
 
 //events
@@ -45,8 +103,15 @@ const windElement = document.querySelector("#wind span")
 searchBtn.addEventListener("click", (e) =>{
     e.preventDefault();
     const city = cityInput.value
-    
-    dataElement.style.display = "block"
+    showLoading(city)
+  //  showWeatherData(city)
+})
 
-    showWeatherData(city)
+
+cityInput.addEventListener("keyup", (e) =>{
+    if(e.code === "Enter"){
+        const city = e.target.value
+
+        showLoading(city)
+    }
 })

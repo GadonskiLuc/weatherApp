@@ -57,6 +57,40 @@ body{
 
 /* Clima */
 
+#loading{
+    border-top: #fff solid 1px;
+    max-width: 500px;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    text-align: center;
+    
+}
+#city-suggestion{
+    border-top: #fff solid 1px;
+    max-width: 500px;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    text-align: center;
+    
+}
+
+#city-button{
+    background-color: #8dd0f5;
+    font-weight: bold;
+    font-size: large;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 20px;
+    margin: 1rem;
+    width: 200px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+#city-button:hover{
+    background-color: #a9d9f3;
+}
+
 #weather-data {
     border-top: #fff solid 1px;
     margin-top: 1.5rem;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ptBR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
 
     <script src="./js/script.js" defer></script>
 </head>
-<body>
+<body onload="citySuggestions()">
     <div class="container">
         <div class="form">
             <h3>Confira o Clima de uma cidade:</h3>
@@ -27,6 +27,9 @@
                 </button>
             </div>
         </div>
+        <div id="city-suggestion">
+            <!-- suggestions -->
+        </div>
         <div id="weather-data">
             <h2>
                 <i class="fa-solid fa-location-dot"></i>
@@ -36,22 +39,22 @@
                 alt="Bandeira do país" 
                 id="country">
             </h2>
-            <p id="temperature"><span>38</span>&deg;C</p>
+            <p id="temperature"><span></span>&deg;C</p>
             <div id="description-container">
-                <p id="description">Nublado</p>
+                <p id="description"></p>
                 <img 
-                src="https://openweathermap.org/img/wn/01n.png" 
+                src="" 
                 alt="Condições do tempo" 
                 id="weather-icon">
             </div>
             <div id="details-container">
                 <p id="humidity">
                     <i class="fa-solid fa-droplet"></i>
-                    <span>48%</span>
+                    <span></span>
                 </p>
                 <p id="wind">
                     <i class="fa-solid fa-wind"></i>
-                    <span>3km/h</span>
+                    <span></span>
                 </p>
             </div>
         </div>
