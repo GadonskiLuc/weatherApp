@@ -61,13 +61,14 @@ const getWeatherData = async (city) => {
 
     const showWeatherData = async (city) =>{
         console.log(getImage(city))
-        try{
-            const bgImage = await getImage(city)
-            const data = await getWeatherData(city)
+        const bgImage = await getImage(city)
+        const data = await getWeatherData(city)
+        console.log(data)
+
+        if(data.cod == "200"){
             cityContainer.style.display = "none"
             loading.style.display = "none"
-            //console.log(data)
-    
+            
             cityElement.innerText = data.name
             //tempElement.innerText = parseInt(data.main.temp)
             tempElement.innerText = Math.trunc(data.main.temp)
@@ -81,11 +82,20 @@ const getWeatherData = async (city) => {
             }else{
                 document.body.style.backgroundImage = `url('${bgImage.results[0].urls.full}')`
             }
-            
-        }catch(err){
-            dataContainer.innerText = "Cidade não localizada"    
+        }else if(data.cod == "404"){
+            dataContainer.innerText = "Cidade não encontrada, tente novamente"    
+            loading.style.display = "none"
+        }else{
+            dataContainer.innerText = `Erro: ${data.cod}, tente recarregar a página`    
+            loading.style.display = "none"
         }
         dataContainer.style.display = "block"
+        
+        // try{
+        // }catch(err){
+        //     console.log(err)
+        //     dataContainer.innerText = "Erro desconhecido, recarregue a página"    
+        // }
     }
 
     const citySuggestions = () => {
