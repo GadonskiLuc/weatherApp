@@ -2,6 +2,11 @@
 
 const apiKey = "fd73a31465a64424b887ac48a298597e"
 const apiCountryURL = "https://flagsapi.com/"
+const imageApiKey = "&client_id=iZT5EqU8n65t5NCUrJzsvuLHDgZd1-TD25mlOlYpf3s"
+const templateImg = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+
+
+
 const loading = document.createElement("div")
 
 const cityList = [
@@ -36,17 +41,28 @@ const cityContainer = document.querySelector("#city-suggestion")
 
 //functions
 
-    const getWeatherData = async (city) => {
+const getWeatherData = async (city) => {
         const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`
-
+        
         const res = await fetch(apiWeatherURL)
         const data = await res.json()
         
         return data
     }
     
+    const getImage = async (city) =>{
+        const imageApiUrl = `https://api.unsplash.com/search/photos?per_page=1&orientation=landscape&query=${city}${imageApiKey}`
+        
+        const imageRes = await fetch(imageApiUrl)
+        const imageData = await imageRes.json()
+        
+        return imageData
+    }
+
     const showWeatherData = async (city) =>{
+        console.log(getImage(city))
         try{
+            const bgImage = await getImage(city)
             const data = await getWeatherData(city)
             cityContainer.style.display = "none"
             loading.style.display = "none"
@@ -60,6 +76,11 @@ const cityContainer = document.querySelector("#city-suggestion")
             humidityElement.innerText = `${data.main.humidity}%`
             windElement.innerText = `${data.wind.speed}km/h`
             countryElement.setAttribute('src',apiCountryURL+data.sys.country+"/flat/64.png")
+            if(bgImage.total == 0){
+                document.body.style.backgroundImage = `url('${templateImg}')`
+            }else{
+                document.body.style.backgroundImage = `url('${bgImage.results[0].urls.full}')`
+            }
             
         }catch(err){
             dataContainer.innerText = "Cidade não localizada"    
